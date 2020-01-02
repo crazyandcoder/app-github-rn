@@ -2,11 +2,22 @@ import React, {Component} from 'react';
 import {
     View, Image, StatusBar, StyleSheet, Dimensions,  Animated, Easing
 } from 'react-native';
-import LottieView from 'lottie-react-native';
+import userActions from '../../store/actions/user';
+import LoginPage from './LoginPage';
+import HomePage from './HomePage';
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import {Actions} from 'react-native-router-flux';
+import loginActions from '../../store/actions/login';
+import styles, {screenHeight, screenWidth} from "../../style";
 
-export const screenWidth = Dimensions.get("window").width;
-export const screenHeight = Dimensions.get("window").height;
-
+@connect(
+    state => ({
+        state
+    }), dispatch => ({
+        actions: bindActionCreators(loginActions, dispatch),
+    })
+)
 export default class WelcomePage extends Component {
 
     constructor(props) {
@@ -23,12 +34,30 @@ export default class WelcomePage extends Component {
             duration:2000,
             easing:Easing.linear,
         }).start();
+
+        userActions.initUserInfo().then((res)=> {
+            this.nextStep(res);
+        });
     }
 
     componentWillUnmount() {
         if (this.refs.lottieView) {
             this.refs.lottieView.reset();
         }
+    }
+
+    /**
+     * 判断是否需要登陆还是进入主页
+     * @param res
+     */
+    nextStep =(res)=>{
+        setTimeout(()=>{
+            if (res && res.result) {
+                Actions.reset("root");
+            } else {
+                Actions.reset("LoginPage");
+            }
+        },2000);
     }
 
 
@@ -40,19 +69,6 @@ export default class WelcomePage extends Component {
                     <Image source={require("../../image/ic_welcome.png")}
                            resizeMode={"contain"}
                            style={{width: screenWidth, height: screenHeight}}/>
-                    <View style={[styles.absoluteFull, styles.centered, {justifyContent: "flex-end"}]}>
-                        <View style={[styles.centered, {width: 150, height:150}]}>
-                            <LottieView
-                                ref="lottieView"
-                                style={{
-                                    width: 150,
-                                    height: 150,
-                                }}
-                                source={require('../../style/lottie/animation-w800-h800.json')}
-                                progress={this.state.progress}
-                            />
-                        </View>
-                    </View>
                 </View>
             </View>
         )
@@ -62,22 +78,3 @@ export default class WelcomePage extends Component {
 }
 
 
-const styles = StyleSheet.create({
-    mainBox: {
-        backgroundColor: '#ececec',
-        flex: 1
-    },
-    absoluteFull: {
-        position: "absolute",
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        zIndex: 999,
-    },
-    centered: {
-        justifyContent: "center",
-        alignItems: "center"
-    },
-
-});

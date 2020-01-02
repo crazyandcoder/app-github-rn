@@ -1,7 +1,7 @@
-import {CLIENT_ID, CLIENT_SECRET} from './app/config/ignoreConfig';
+import {CLIENT_ID, CLIENT_SECRET} from '../../config/ignoreConfig';
 import {Buffer} from 'buffer';
-import Api from 'app/http/http';
-import ApiUrl from 'app/common/ApiUrl';
+import Api from '../../http/http';
+import ApiUrl from '../../common/ApiUrl';
 import AsyncStorage from "@react-native-community/async-storage";
 import * as Constant from '../../common/constant';
 import ToastUtils from '../../utils/ToastUtils';
