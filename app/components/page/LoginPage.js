@@ -13,6 +13,7 @@ import {
     TextInput,
     StyleSheet,
     TouchableOpacity,
+    Keyboard,
 } from 'react-native';
 
 import ToastUtils from '../../../app/utils/ToastUtils';
@@ -21,13 +22,13 @@ import loginActions from '../../store/actions/login'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import {Actions} from 'react-native-router-flux';
+import * as Translation from '../../style/translates'
 
 
 @connect(
-    state=>({
-        state
-    }), dispatch =>({
-        login:bindActionCreators(loginActions,dispatch),
+    state => ({state}),
+    dispatch => ({
+        login: bindActionCreators(loginActions, dispatch)
     })
 )
 export default class LoginPage extends Component {
@@ -35,32 +36,70 @@ export default class LoginPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            password: '',
-            username: '',
-            result:''
+            saveUserName: '',
+            savePassword: '',
+            result: ''
         }
     }
 
-    _login = async () => {
+    componentDidMount() {
+        loginActions.getLoginParams().then((res) => {
+            this.setState({
+                saveUserName: res.userName,
+                savePassword: res.password
+            });
+        });
+    }
 
-        let username = this.state.username;
-        let password = this.state.password;
-        if (username.length === 0) {
-            ToastUtils('please input username');
+    _login =  () => {
+
+        let userName=this.state.saveUserName;
+        let password=this.state.savePassword;
+
+        if (userName.length === 0) {
+            ToastUtils(Translation.translate.en.LoginNameTip);
             return;
         }
         if (password.length === 0) {
-            ToastUtils('please input password');
+            ToastUtils(Translation.translate.en.LoginPWTip);
             return;
         }
 
-        loginAction.doLogin(username,password,(res)=>{
-
+        Keyboard.dismiss();
+        Actions.LoadingModal({backExit: false});
+        loginActions.doLogin(userName, password, (res) => {
+            this.exitLoading()
+            if (res) {
+                Actions.reset("root")
+            } else {
+                ToastUtils(Translation.translate.en.LoginFailTip)
+            }
         })
 
 
 
     }
+
+    //关闭loading框
+    exitLoading() {
+        if (Actions.currentScene === 'LoadingModal') {
+            Actions.pop();
+        }
+    }
+
+
+    userInputChange = (text) => {
+        this.setState({
+            saveUserName:text
+        })
+    }
+
+    passwordChange = (text) => {
+        this.setState({
+            savePassword:text
+        })
+    }
+
 
     render() {
 
@@ -81,7 +120,7 @@ export default class LoginPage extends Component {
                         borderWidth: 1
                     }}
                     placeholder='username'
-                    onChangeText={(username) => this.setState({username})}
+                    onChangeText={this.userInputChange}
                 />
 
                 <TextInput
@@ -95,17 +134,17 @@ export default class LoginPage extends Component {
                     }}
                     placeholder='password'
                     secureTextEntry={true}
-                    onChangeText={(password) => this.setState({password})}
+                    onChangeText={this.passwordChange}
                 />
 
                 <TouchableOpacity style={styles.loginBtnBg} onPress={this._login}>
                     <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{color: '#ffffff'}}>login</Text>
+                        <Text style={{color: '#ffffff',fontSize:16}}>login</Text>
                     </View>
                 </TouchableOpacity>
 
 
-                <Text style={{fontSize:15,}}>{this.state.result}</Text>
+                <Text style={{fontSize: 15,}}>{this.state.result}</Text>
 
             </View>
         );

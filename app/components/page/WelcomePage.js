@@ -4,7 +4,6 @@ import {
 } from 'react-native';
 import userActions from '../../store/actions/user';
 import LoginPage from './LoginPage';
-import HomePage from './HomePage';
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import {Actions} from 'react-native-router-flux';

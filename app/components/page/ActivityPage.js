@@ -26,9 +26,9 @@ export default class ActivityPage extends Component {
     render() {
 
         return (
-            <View style={{marginTop: 200, flex: 1, alignItems: 'center'}}>
+            <View style={{ flex: 1, alignItems: 'center'}}>
                 <View style={{justifyContent: 'center'}}>
-                    <Text style={styles.title}>hello, this is a homePage!</Text>
+                    <Text style={styles.title}>hello, this is a ActivityPage!</Text>
                 </View>
             </View>
         );

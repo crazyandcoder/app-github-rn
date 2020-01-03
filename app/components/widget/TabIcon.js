@@ -17,14 +17,14 @@ import {
 
 import * as Constant from '../../common/constant'
 import styles from '../../style'
-import Translate from '../../style/translates'
 import Icon from 'react-native-vector-icons/Feather'
 
 
 const config = {
-    ["tabRecommended"]: 'activity',
-    ["tabDynamic"]: 'aperture',
-    ["tabMy"]: 'users',
+    ["tabActivity"]: 'message-circle',
+    ["tabTrending"]: 'trending-up',
+    ["tabSearch"]: 'search',
+    ["tabMy"]: 'user',
 };
 
 const propTypes = {
@@ -47,7 +47,7 @@ class TabIcon extends Component {
 
         let iconPath = config[this.props.tabIconName];
 
-        let color = this.props.focused ? Constant.tabSelectedColor : Constant.tabUnSelectColor;
+        let color = this.props.focused ? Constant.lightBlue : Constant.tabUnSelectColor;
 
         return (
             <View style={styles.centered}>

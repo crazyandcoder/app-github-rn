@@ -10,7 +10,7 @@ const actionHandler = {
     [USER.USER_INFO]: (state, action) => {
         return {
             ...state,
-            // userInfo: action.res
+            userInfo: action.res
         }
     },
 };

@@ -4,10 +4,10 @@ import Api from '../../http/http';
 import ApiUrl from '../../common/ApiUrl';
 import AsyncStorage from "@react-native-community/async-storage";
 import * as Constant from '../../common/constant';
-import ToastUtils from '../../utils/ToastUtils';
+import userAction from './user';
+import {LOGIN} from '../type';
 
-
-const doLogin = (username, password, callback) => async () => {
+const doLogin = async (username, password, callback) => {
 
     let base64Str = Buffer(username + ":" + password).toString('base64');
     AsyncStorage.setItem(Constant.USER_NAME_KEY, username);
@@ -30,14 +30,28 @@ const doLogin = (username, password, callback) => async () => {
 
     if (res && res.result) {
         AsyncStorage.setItem(Constant.PW_KEY, password);
-        setTimeout(() => {
-            callback && callback(res.result);
-        }, 1000)
-    } else {
-        ToastUtils('login error');
+        //存储用户信息，调用接口保存数据
+        let current = await userAction.getUserInfo();
     }
-}
+    setTimeout(() => {
+        callback && callback(res.result);
+    }, 1000)
+};
+
+/**
+ * 获取当前登录用户的参数
+ * @returns {Promise<{userName: string, password: string}>}
+ */
+const getLoginParams = async () => {
+    let userName = await AsyncStorage.getItem(Constant.USER_NAME_KEY);
+    let password = await AsyncStorage.getItem(Constant.PW_KEY);
+    return {
+        userName: (userName) ? userName : "",
+        password: (password) ? password : "",
+    }
+};
 
 export default {
     doLogin,
+    getLoginParams
 }

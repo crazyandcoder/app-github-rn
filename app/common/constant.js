@@ -9,6 +9,7 @@ export const tabBackgroundColor = '#ffffff';
 export const cardBackgroundColor = '#FFF';
 export const cardShadowColor = '#000000';
 export const actionBlue = '#267aff';
+export const lightBlue="#03a9f4";
 
 export const lineColor = '#42464b';
 
@@ -46,8 +47,8 @@ export const minTextSize = 12;
 
 
 // tabBar 高度
-export const tabBarHeight = 44;
-export const tabIconSize = 20;
+export const tabBarHeight = 50;
+export const tabIconSize = 24;
 
 
 export const normalIconSize = 40;
@@ -63,9 +64,11 @@ export const normalNumberOfLine = 4;
 
 /****************图标****************/
 export const nextIcon = 'chevron-right';
-export const tabRecommended = 'activity';
-export const tabDynamic = 'aperture';
-export const tabMy = 'users';
+export const tabMy = 'user';
+export const tabActivity = 'message-circle';
+export const tabSearch = 'search';
+export const tabTrending='trending-up';
+
 
 
 /****************常量****************/
